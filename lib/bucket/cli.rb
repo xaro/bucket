@@ -8,19 +8,24 @@ module Bucket
     def initialize(*args)
       super
 
-      authenticate! 
-    end
-
-    desc "setup", "setup"
-    def setup
-      authenticate!
-    end
-
-    private
-    def authenticate!
       @client = Bucket::Client.new load_config
     end
 
+    desc "setup", "Setup your BitBucket credentials"
+    def setup
+      generate_config
+
+      say("Configuration saved to ~/.bucket")
+    end
+
+    desc "repos", "List your own repositories"
+    def repos
+      @client.repos_list.each do |repo|
+        say(repo.slug)
+      end
+    end
+
+    private
     def load_config
       YAML.load_file("#{Dir.home}/.bucket")
     rescue
@@ -45,7 +50,7 @@ module Bucket
       password = $stdin.noecho(&:gets).strip
       @shell.say("")
 
-      { username: username, password: password }
+      { "username" => username, "password" => password }
     end
   end
 end
