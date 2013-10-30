@@ -25,7 +25,7 @@ module Bucket
       end
     end
 
-    desc "clone", "Clone repository USER/NAME from bitbucket"
+    desc "clone [USER] [NAME]", "Clone repository USER/NAME from bitbucket"
     def clone(user, name)
       `git clone #{@client.repo_url(user, name)}`
     end
