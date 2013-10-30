@@ -13,16 +13,12 @@ module Bucket
 
     desc "setup", "setup"
     def setup
-      get_oauth
+      authenticate!
     end
 
     private
     def authenticate!
-      @client = Bucket::Client.new get_oauth
-    end
-
-    def get_oauth
-      load_config
+      @client = Bucket::Client.new load_config
     end
 
     def load_config
@@ -32,15 +28,15 @@ module Bucket
     end
 
     def generate_config
-      save_config generate_oauth_key
+      save_config ask_credentials
     end
 
-    def save_config(oauth)
+    def save_config(credentials)
       File.open "#{Dir.home}/.bucket", 'w' do |f|
-        YAML.dump(oauth , f)
+        YAML.dump(credentials , f)
       end
 
-      oauth
+      credentials
     end
 
     def ask_credentials
@@ -49,17 +45,7 @@ module Bucket
       password = $stdin.noecho(&:gets).strip
       @shell.say("")
 
-      "#{username}:#{password}"
-    end
-
-    def generate_oauth_key
-      bitbucket = BitBucket.new(basic_auth: ask_credentials)  
-      resp = bitbucket.post_request("/users/#{bitbucket.login}/consumers", name: 'bucket')
-
-      {
-        key: resp["key"],
-        secret: resp["secret"]
-      }
+      { username: username, password: password }
     end
   end
 end

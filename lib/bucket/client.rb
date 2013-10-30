@@ -1,8 +1,7 @@
 module Bucket
   class Client
-    def initialize(oauth)
-      @key = oauth[:key]
-      @secret = oauth[:secret]
+    def initialize(credentials)
+      @connection = BitBucket.new basic_auth: "#{credentials[:username]}:#{credentials[:password]}"
     end
   end
 end
