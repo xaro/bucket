@@ -13,5 +13,12 @@ module Bucket
     def repo_url(user, name)
       "#{GIT_URL}:#{user}/#{name}.git"
     end
+
+    # Returns the created repository scm url
+    def create_repo(name)
+      resp = @connection.repos.create(name: name)
+
+      "#{GIT_URL}:#{resp["owner"]}/#{name}.git"
+    end
   end
 end

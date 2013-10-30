@@ -30,6 +30,15 @@ module Bucket
       `git clone #{@client.repo_url(user, name)}`
     end
 
+    desc "init [directory]", "Create a new repository locally and on BitBucket"
+    def init(directory)
+      expanded_dir = File.expand_path(directory)
+      `git init #{expanded_dir}`
+      
+      repo_url = @client.create_repo(File.basename(expanded_dir))
+      `git remote add origin #{repo_url}`
+    end
+
     private
     def load_config
       YAML.load_file("#{Dir.home}/.bucket")
