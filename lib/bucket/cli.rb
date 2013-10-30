@@ -25,6 +25,11 @@ module Bucket
       end
     end
 
+    desc "clone", "Clone repository USER/NAME from bitbucket"
+    def clone(user, name)
+      `git clone #{@client.repo_url(user, name)}`
+    end
+
     private
     def load_config
       YAML.load_file("#{Dir.home}/.bucket")
