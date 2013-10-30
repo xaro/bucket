@@ -21,7 +21,7 @@ module Bucket
     desc "repos", "List your own repositories"
     def repos
       @client.repos_list.each do |repo|
-        say(repo.slug)
+        say("#{repo.owner}/#{repo.slug}")
       end
     end
 
