@@ -8,8 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Bucket::VERSION
   spec.authors       = ["Roberto Poo"]
   spec.email         = ["xaro@poo.cl"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{CLI for BitBucket}
+  spec.summary       = %q{Easily clone and create repositories in BitBucket from the command line.
+                          Init and link the local repository with a new BitBucket one in one command.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
