@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{CLI for BitBucket}
   spec.summary       = %q{Easily clone and create repositories in BitBucket from the command line.
                           Init and link the local repository with a new BitBucket one in one command.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/xaro/bucket"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
