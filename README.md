@@ -1,12 +1,12 @@
 # Bucket
 
-TODO: Write a gem description
+A Command Line Interface for BitBucket.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'bucket'
+    gem 'bucket-cli'
 
 And then execute:
 
@@ -14,7 +14,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install bucket
+    $ gem install bucket-cli
 
 ## Usage
 

@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'bucket/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "bucket"
+  spec.name          = "bucket-cli"
   spec.version       = Bucket::VERSION
   spec.authors       = ["Roberto Poo"]
   spec.email         = ["xaro@poo.cl"]
