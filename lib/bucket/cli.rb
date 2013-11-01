@@ -18,25 +18,30 @@ module Bucket
       say("Configuration saved to ~/.bucket")
     end
 
-    desc "repos", "List your own repositories"
+    desc "repos", "List your own repositories."
     def repos
       @client.repos_list.each do |repo|
-        say("#{repo.owner}/#{repo.slug}")
+        say(@client.repo_full_name(repo))
       end
     end
 
-    desc "clone [USER] [NAME]", "Clone repository USER/NAME from bitbucket"
+    desc "clone [USER] [NAME]", "Clone repository USER/NAME from bitbucket."
     def clone(user, name)
       `git clone #{@client.repo_url(user, name)}`
     end
 
-    desc "init [directory]", "Create a new repository locally and on BitBucket"
+    desc "init [directory]", "Create a new repository locally and on BitBucket."
+    option :name
+    option :description
+    option :public, type: :boolean, default: false
     def init(directory)
       expanded_dir = File.expand_path(directory)
       `git init #{expanded_dir}`
       
-      repo_url = @client.create_repo(File.basename(expanded_dir))
-      `git remote add origin #{repo_url}`
+      repo = @client.create_repo(options[:name] || File.basename(expanded_dir), options)
+      `git remote add origin #{@client.repo_url(repo[:owner], repo[:slug])}`
+
+      say("Repository #{@client.repo_full_name(repo)} created.")
     end
 
     private

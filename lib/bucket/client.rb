@@ -14,11 +14,16 @@ module Bucket
       "#{GIT_URL}:#{user}/#{name}.git"
     end
 
-    # Returns the created repository scm url
-    def create_repo(name)
-      resp = @connection.repos.create(name: name)
-
-      "#{GIT_URL}:#{resp["owner"]}/#{name}.git"
+    def repo_full_name(repo)
+      "#{repo[:owner]}/#{repo[:slug]}"
     end
+
+    # Returns the created repository scm url
+    def create_repo(name, options={})
+      options = options.merge(is_private: !options[:public])
+
+      @connection.repos.create(options.merge(name: name))
+    end
+
   end
 end
