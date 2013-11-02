@@ -25,9 +25,9 @@ module Bucket
       end
     end
 
-    desc "clone [USER] [NAME]", "Clone repository USER/NAME from bitbucket."
-    def clone(user, name)
-      `git clone #{@client.repo_url(user, name)}`
+    desc "clone [USER]/REPOSITORY", "Clone repository REPOSITORY from bitbucket.\nIf [USER] is ommited, it is assumed that it's your BitBucket user."
+    def clone(name)
+      `git clone #{@client.repo_url(name)}`
     end
 
     desc "init [directory]", "Create a new repository locally and on BitBucket."
@@ -39,7 +39,7 @@ module Bucket
       `git init #{expanded_dir}`
       
       repo = @client.create_repo(options[:name] || File.basename(expanded_dir), options)
-      `git remote add origin #{@client.repo_url(repo[:owner], repo[:slug])}`
+      `git remote add origin #{@client.repo_url("#{repo[:owner]}/#{repo[:slug]}")}`
 
       say("Repository #{@client.repo_full_name(repo)} created.")
     end
