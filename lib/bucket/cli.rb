@@ -5,6 +5,8 @@ require_relative "../bucket"
 
 module Bucket
   class CLI < Thor
+    include Thor::Actions
+
     def initialize(*args)
       super
 
@@ -27,7 +29,7 @@ module Bucket
 
     desc "clone [USER]/REPOSITORY", "Clone repository REPOSITORY from bitbucket.\nIf [USER] is ommited, it is assumed that it's your BitBucket user."
     def clone(name)
-      `git clone #{@client.repo_url(name)}`
+      print run("git clone #{@client.repo_url(name)}", capture: true, verbose: false)
     end
 
     desc "init [directory]", "Create a new repository locally and on BitBucket."
@@ -36,10 +38,11 @@ module Bucket
     option :public, type: :boolean, default: false
     def init(directory)
       expanded_dir = File.expand_path(directory)
-      `git init #{expanded_dir}`
+      print run("git init #{expanded_dir}", capture: true, verbose: false))
       
       repo = @client.create_repo(options[:name] || File.basename(expanded_dir), options)
-      `git remote add origin #{@client.repo_url("#{repo[:owner]}/#{repo[:slug]}")}`
+      repu_url = @client.repo_url("#{repo[:owner]}/#{repo[:slug]}")
+      print run("git remote add origin #{repo_url}", capture: true, verbose: false))
 
       say("Repository #{@client.repo_full_name(repo)} created.")
     end
