@@ -59,7 +59,7 @@ module Bucket
     end
 
     def save_config(credentials)
-      File.open "#{Dir.home}/.bucket", 'w' do |f|
+      File.open "#{Dir.home}/.bucket", 'w', 0600 do |f|
         YAML.dump(credentials , f)
       end
 
