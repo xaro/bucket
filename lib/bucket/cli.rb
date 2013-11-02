@@ -32,17 +32,17 @@ module Bucket
       print run("git clone #{@client.repo_url(name)}", capture: true, verbose: false)
     end
 
-    desc "init [directory]", "Create a new repository locally and on BitBucket."
-    option :name
-    option :description
-    option :public, type: :boolean, default: false
+    desc "init DIRECTORY", "Create a new repository locally and on BitBucket."
+    option :name, desc: "The name of the repository."
+    option :description, desc: "A description for the repository."
+    option :public, desc: "Sets if the repository is public or private.", type: :boolean, default: false
     def init(directory)
       expanded_dir = File.expand_path(directory)
-      print run("git init #{expanded_dir}", capture: true, verbose: false))
+      print run("git init #{expanded_dir}", capture: true, verbose: false)
       
       repo = @client.create_repo(options[:name] || File.basename(expanded_dir), options)
       repu_url = @client.repo_url("#{repo[:owner]}/#{repo[:slug]}")
-      print run("git remote add origin #{repo_url}", capture: true, verbose: false))
+      print run("git remote add origin #{repo_url}", capture: true, verbose: false)
 
       say("Repository #{@client.repo_full_name(repo)} created.")
     end
