@@ -10,7 +10,7 @@ module Bucket
     def initialize(*args)
       super
 
-      @client = Bucket::Client.new load_config
+      @client = Bucket::Client.new(load_config)
     end
 
     desc "setup", "Setup your BitBucket credentials"
@@ -39,9 +39,9 @@ module Bucket
     def init(directory)
       expanded_dir = File.expand_path(directory)
       print run("git init #{expanded_dir}", capture: true, verbose: false)
-      
+
       repo = @client.create_repo(options[:name] || File.basename(expanded_dir), options)
-      repu_url = @client.repo_url("#{repo[:owner]}/#{repo[:slug]}")
+      repo_url = @client.repo_url("#{repo[:owner]}/#{repo[:slug]}")
       print run("git remote add origin #{repo_url}", capture: true, verbose: false)
 
       say("Repository #{@client.repo_full_name(repo)} created.")
@@ -55,7 +55,7 @@ module Bucket
     end
 
     def generate_config
-      save_config ask_credentials
+      save_config(ask_credentials)
     end
 
     def save_config(credentials)
@@ -68,11 +68,13 @@ module Bucket
 
     def ask_credentials
       username = @shell.ask("Username:")
+
+      # We ask the password this way to avoid echoing it
       @shell.say("Password: ")
       password = $stdin.noecho(&:gets).strip
       @shell.say("")
 
-      { "username" => username, "password" => password }
+      { username: username, password: password }
     end
   end
 end

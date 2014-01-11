@@ -11,6 +11,10 @@ module Bucket
       @connection.repos.list
     end
 
+    # Full url for the given repository
+    # The repository name must be of the style [USER]/[REPOSITORY] or
+    # [REPOSITORY] in which case the name of the current user
+    # will be used as owner
     def repo_url(name)
       split_name = name.split "/"
 
@@ -21,10 +25,11 @@ module Bucket
         user = split_name[0]
         slug = split_name[1]
       end
-      
+
       "#{GIT_URL}:#{user}/#{slug}.git"
     end
 
+    # A repository full name is of the style of [USER]/[REPOSITORY]
     def repo_full_name(repo)
       "#{repo[:owner]}/#{repo[:slug]}"
     end
@@ -35,6 +40,5 @@ module Bucket
 
       @connection.repos.create(options.merge(name: name))
     end
-
   end
 end
