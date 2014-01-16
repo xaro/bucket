@@ -33,7 +33,7 @@ module Bucket
     end
 
     desc "init DIRECTORY", "Create a new repository locally and on BitBucket."
-    option :name, desc: "The name of the repository."
+    option :name, desc: "The name of the repository. If not specified, the current folder will be used."
     option :description, desc: "A description for the repository."
     option :public, desc: "Sets if the repository is public or private.", type: :boolean, default: false
     def init(directory)
@@ -74,7 +74,7 @@ module Bucket
       password = $stdin.noecho(&:gets).strip
       @shell.say("")
 
-      { username: username, password: password }
+      { "username" => username, "password" => password }
     end
   end
 end
