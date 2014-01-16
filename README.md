@@ -79,6 +79,12 @@ You can list the repositories associated with your account by using
 $ bucket repos
 ~~~
 
+## TODO
+* Change direct git calls to ruby git gem
+* Improve error reporting (easier with the git gem)
+* Add more commands
+* Shallow redirect commands to git / mercurial
+
 ## Contributing
 
 1. Fork it
