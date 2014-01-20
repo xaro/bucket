@@ -84,6 +84,7 @@ $ bucket repos
 * Improve error reporting (easier with the git gem)
 * Add more commands
 * Shallow redirect commands to git / mercurial
+* Replace bitbucket api gem (it has too many dependencies and is not complete)
 
 ## Contributing
 
