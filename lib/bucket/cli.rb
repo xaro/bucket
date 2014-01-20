@@ -67,12 +67,12 @@ module Bucket
     end
 
     def ask_credentials
-      username = @shell.ask("Username:")
+      username = ask("Username:")
 
-      # We ask the password this way to avoid echoing it
-      @shell.say("Password: ")
-      password = $stdin.noecho(&:gets).strip
-      @shell.say("")
+      # Avoid echoing the password
+      password = ask("Password:", echo: false)
+
+      say("\nWARNING: For now, the password is saved IN PLAIN TEXT in the ~/.bucket file.")
 
       { "username" => username, "password" => password }
     end

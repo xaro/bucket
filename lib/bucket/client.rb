@@ -3,7 +3,7 @@ module Bucket
     GIT_URL = "git@bitbucket.org"
 
     def initialize(credentials)
-      @connection = BitBucket.new basic_auth: "#{credentials["username"]}:#{credentials["password"]}"
+      @connection = BitBucket.new(basic_auth: "#{credentials["username"]}:#{credentials["password"]}")
       @user = credentials["username"]
     end
 

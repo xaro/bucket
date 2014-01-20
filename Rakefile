@@ -5,6 +5,7 @@ task :default => :spec
 
 Rake::TestTask.new(:spec) do |t|
   t.test_files = FileList['spec/**/*_spec.rb']
+  t.libs.push 'spec'
 end
 
 desc "Console"
