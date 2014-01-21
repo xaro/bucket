@@ -6,19 +6,18 @@ describe Bucket::CLI do
 
   # Use a fake filesystem and clear it after each test
   before do
-   FakeFS.activate!
+    mock_credentials
+    FakeFS.activate!
 
-   # Create a fake user's home (in reality this folder will exist)
-   FileUtils.mkdir_p(Dir.home)
+    # Create a fake user's home (in reality this folder will exist)
+    FileUtils.mkdir_p(Dir.home)
   end
   after do
-   FakeFS.deactivate!
-   FakeFS::FileSystem.clear
+    FakeFS.deactivate!
+    FakeFS::FileSystem.clear
   end
 
   it "saves the user and password to the configuration file" do
-    mock_credentials
-
     # The setup is run when initializing the CLI
     out = capture_io { subject }
 
@@ -27,9 +26,7 @@ describe Bucket::CLI do
   end
 
   it "replaces the user and password when calling setup" do
-    mock_credentials
-
-    # Run the setup when initializing
+    # Run the setup when initializing (and ignore output)
     capture_io { subject }
 
     # Run the setup again with other credentials
@@ -38,6 +35,21 @@ describe Bucket::CLI do
 
     config = YAML.load_file("#{Dir.home}/.bucket")
     config.must_equal({ "username" => "other_user", "password" => "other_password" })
+  end
+
+  it "displays a list of the user's repositories" do
+    any_instance_of(Bucket::Client) do |client|
+      mock(client).repos_list do
+        [
+          { owner: "user", slug: "repository" },
+          { owner: "other_user", slug: "other_repository" }
+        ]
+      end
+    end
+
+    out = capture_io { subject.repos }.join('')
+    out.must_match(/user\/repository/)
+    out.must_match(/other_user\/other_repository/)
   end
 end
 
