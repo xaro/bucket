@@ -7,6 +7,8 @@ module Bucket
   class CLI < Thor
     include Thor::Actions
 
+    CONFIG_FILE_PATH = "#{Dir.home}/.bucket"
+
     def initialize(*args)
       super
 
@@ -49,7 +51,7 @@ module Bucket
 
     private
     def load_config
-      YAML.load_file("#{Dir.home}/.bucket")
+      YAML.load_file(CONFIG_FILE_PATH)
     rescue
       generate_config
     end
@@ -59,7 +61,7 @@ module Bucket
     end
 
     def save_config(credentials)
-      File.open "#{Dir.home}/.bucket", 'w', 0600 do |f|
+      File.open CONFIG_FILE_PATH, 'w', 0600 do |f|
         YAML.dump(credentials , f)
       end
 

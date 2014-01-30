@@ -21,7 +21,7 @@ describe Bucket::CLI do
     # The setup is run when initializing the CLI
     out = capture_io { subject }
 
-    config = YAML.load_file("#{Dir.home}/.bucket")
+    config = YAML.load_file(Bucket::CLI::CONFIG_FILE_PATH)
     config.must_equal({ "username" => "user", "password" => "password" })
   end
 
@@ -33,7 +33,7 @@ describe Bucket::CLI do
     mock_credentials("other_user", "other_password")
     capture_io { subject.setup }
 
-    config = YAML.load_file("#{Dir.home}/.bucket")
+    config = YAML.load_file(Bucket::CLI::CONFIG_FILE_PATH)
     config.must_equal({ "username" => "other_user", "password" => "other_password" })
   end
 
