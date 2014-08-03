@@ -23,6 +23,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "thor"
   spec.add_dependency "bitbucket_rest_api"
 
+  # Git access via Ruby
+  spec.add_dependency "git"
+
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "pry"

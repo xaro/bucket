@@ -1,6 +1,7 @@
 require "thor"
 require "io/console"
 require "yaml"
+require "git"
 require_relative "../bucket"
 
 module Bucket
@@ -31,7 +32,13 @@ module Bucket
 
     desc "clone [USER]/REPOSITORY", "Clone repository REPOSITORY from bitbucket.\nIf [USER] is ommited, it is assumed that it's your BitBucket user."
     def clone(name)
-      print run("git clone #{@client.repo_url(name)}", capture: true, verbose: false)
+      begin
+        repository = Git::Base.clone(@client.repo_url(name), name)
+        say("Repository cloned to #{repository.dir}")
+      rescue Git::GitExecuteError => e
+        say("Could not clone repository")
+        say(e.message)
+      end
     end
 
     desc "init DIRECTORY", "Create a new repository locally and on BitBucket."
@@ -40,13 +47,14 @@ module Bucket
     option :public, desc: "Sets if the repository is public or private.", type: :boolean, default: false
     def init(directory)
       expanded_dir = File.expand_path(directory)
-      print run("git init #{expanded_dir}", capture: true, verbose: false)
+      repository = Git::Base.init(expanded_dir)
 
-      repo = @client.create_repo(options[:name] || File.basename(expanded_dir), options)
-      repo_url = @client.repo_url("#{repo[:owner]}/#{repo[:slug]}")
-      print run("git remote add origin #{repo_url}", capture: true, verbose: false)
+      # Create the BitBucket repository and add it to the local remotes
+      remote_repository = @client.create_repo(options[:name] || File.basename(expanded_dir), options)
+      remote_url = @client.repo_url("#{remote_repository[:owner]}/#{remote_repository[:slug]}")
+      repository.add_remote("BitBucket", remote_url)
 
-      say("Repository #{@client.repo_full_name(repo)} created.")
+      say("Repository #{@client.repo_full_name(remote_repository)} with remote #{remote_url} created.")
     end
 
     private
