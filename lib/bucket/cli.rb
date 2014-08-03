@@ -46,15 +46,9 @@ module Bucket
     option :description, desc: "A description for the repository."
     option :public, desc: "Sets if the repository is public or private.", type: :boolean, default: false
     def init(directory)
-      expanded_dir = File.expand_path(directory)
-      repository = Git::Base.init(expanded_dir)
+      repository = @client.init(directory, options)
 
-      # Create the BitBucket repository and add it to the local remotes
-      remote_repository = @client.create_repo(options[:name] || File.basename(expanded_dir), options)
-      remote_url = @client.repo_url("#{remote_repository[:owner]}/#{remote_repository[:slug]}")
-      repository.add_remote("BitBucket", remote_url)
-
-      say("Repository #{@client.repo_full_name(remote_repository)} with remote #{remote_url} created.")
+      say("Repository with remote #{repository.remote("BitBucket").url} created.")
     end
 
     private

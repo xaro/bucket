@@ -34,6 +34,21 @@ module Bucket
       "#{repo[:owner]}/#{repo[:slug]}"
     end
 
+    def init(directory, options = {})
+      expanded_dir = File.expand_path(directory)
+      repository = Git::Base.init(expanded_dir)
+
+      # If there is not a name specified, use the name of the target directory
+      name = options[:name] || File.basename(expanded_dir)
+
+      # Create the BitBucket repository and add it to the local remotes
+      remote_repository = create_repo(name, options)
+      remote_url = repo_url("#{remote_repository[:owner]}/#{remote_repository[:slug]}")
+      repository.add_remote("BitBucket", remote_url)
+
+      repository
+    end
+
     # Returns the created repository scm url
     def create_repo(name, options={})
       options = options.merge(is_private: !options[:public])
