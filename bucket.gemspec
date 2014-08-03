@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   # Git access via Ruby
   spec.add_dependency "git"
 
-  spec.add_development_dependency "bundler", "~> 1.3"
+  spec.add_development_dependency "bundler", "~> 1.6"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "pry"
 
