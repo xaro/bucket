@@ -52,6 +52,8 @@ module Bucket
     end
 
     private
+    # Loads the configuration from the config file.
+    # If it does not exists, it creates it.
     def load_config
       YAML.load_file(CONFIG_FILE_PATH)
     rescue
@@ -62,6 +64,8 @@ module Bucket
       save_config(ask_credentials)
     end
 
+    # Saves the configuration to the config file, and returns
+    # the config.
     def save_config(credentials)
       File.open CONFIG_FILE_PATH, 'w', 0600 do |f|
         YAML.dump(credentials , f)
